@@ -36,7 +36,11 @@ publications = {
 # Set the character count threshold
 CHAR_THRESHOLD = 1000
 
-# Group the articles by publication and count the number of articles for each publication
+# Replace the name of each publication with an empty string 
+for publication in publications:
+    data["article"] = data["article"].str.replace(publication, "")
+    
+# Group the articles by publication
 for publication, articles in data.groupby("publication"):
     # Filter the articles by character count
     filtered_articles = articles[articles["article"].str.len() > CHAR_THRESHOLD]

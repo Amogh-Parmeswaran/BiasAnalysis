@@ -15,6 +15,7 @@ def encoder(article_text):
     outputs = model(input_ids)
     embeddings = outputs.last_hidden_state[0]
 
+    # Convert the embeddings to a numpy array
     return embeddings.numpy()
 
 

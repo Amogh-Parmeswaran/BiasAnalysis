@@ -1,14 +1,16 @@
 import tensorflow as tf
 import tensorflow_hub as hub
-import ssl 
+import tensorflow_text as text
+
 
 def encode_text(article_text):
+    article_text = tf.constant([article_text])
     text_input = tf.keras.layers.Input(shape=(), dtype=tf.string)
     preprocessor = hub.KerasLayer(
         "https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3")
     encoder_inputs = preprocessor(text_input)
     encoder = hub.KerasLayer(
-        "https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12_V2/3",
+        "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/3",
         trainable=True)
     outputs = encoder(encoder_inputs)
     
@@ -22,4 +24,4 @@ def encode_text(article_text):
 
 if __name__ == '__main__':
     print(4)
-    print(encode_text("The potato"))
+    print(encode_text("Hello World I want to shoot this computer so badly holy fuck"))

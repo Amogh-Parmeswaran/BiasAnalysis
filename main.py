@@ -6,8 +6,9 @@ def encoder(article_text):
     tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
     model = BertModel.from_pretrained("bert-base-uncased")
 
-    # Tokenize the input text and convert to input IDs
+    # Tokenize the input text
     input_ids = tokenizer.encode(article_text, add_special_tokens=True)
+    # Convert the input text into a Tensor 
     input_ids = tf.constant([input_ids])
 
     # Forward pass through the BERT model to obtain embeddings

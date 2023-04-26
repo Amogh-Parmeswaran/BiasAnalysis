@@ -1,22 +1,25 @@
 import tensorflow as tf
-from transformers import BertTokenizer, BertModel
+import tensorflow_hub as hub
+import ssl 
 
-def encoder(article_text):
-    # Load a pretrained BERT tokenizer and model
-    tokenizer = BertTokenizer.from_pretrained("bert-base-uncased")
-    model = BertModel.from_pretrained("bert-base-uncased")
+def encode_text(article_text):
+    text_input = tf.keras.layers.Input(shape=(), dtype=tf.string)
+    preprocessor = hub.KerasLayer(
+        "https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3")
+    encoder_inputs = preprocessor(text_input)
+    encoder = hub.KerasLayer(
+        "https://tfhub.dev/tensorflow/bert_en_uncased_L-12_H-768_A-12_V2/3",
+        trainable=True)
+    outputs = encoder(encoder_inputs)
+    
+    # Create a Keras model to extract the encoded features
+    model = tf.keras.Model(inputs=text_input, outputs=outputs)
+    
+    # Encode the text
+    encoded_text = model(article_text)
+    
+    return encoded_text
 
-    # Tokenize the input text
-    input_ids = tokenizer.encode(article_text, add_special_tokens=True)
-    # Convert the input text into a Tensor 
-    input_ids = tf.constant([input_ids])
-
-    # Forward pass through the BERT model to obtain embeddings
-    outputs = model(input_ids)
-    embeddings = outputs.last_hidden_state[0]
-
-    # Convert the embeddings to a numpy array
-    return embeddings.numpy()
-
-
-
+if __name__ == '__main__':
+    print(4)
+    print(encode_text("The potato"))

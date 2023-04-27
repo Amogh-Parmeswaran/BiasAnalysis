@@ -25,7 +25,3 @@ def encode_text(article_text):
     article_text = tf.constant([article_text])
     return embedding_model(article_text)
     
-
-if __name__ == '__main__':
-    print(4)
-    print(encode_text("Hello World"))

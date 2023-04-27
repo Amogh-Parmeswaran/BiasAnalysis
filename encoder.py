@@ -24,5 +24,3 @@ def encode_text(article_text):
     # Encode the text
     article_text = tf.constant([article_text])
     return embedding_model(article_text) 
-
-encode_text

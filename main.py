@@ -3,7 +3,7 @@ import numpy as np
 from encoder import encode_text
 
 class ModelTrainer():
-    def __init__(self, train_data, test_data, num_classes, model):
+    def __init__(self, model, train_data, test_data, num_classes):
         self.train_data = train_data
         self.test_data = test_data
         self.num_classes = num_classes

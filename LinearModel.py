@@ -13,5 +13,6 @@ class LinearModel(tf.keras.Model):
         ])
     
     def call(self, inputs):
-        encoded_text = encode_text(inputs)
-        return self.model(encoded_text)
+        print('inputs')
+        print(inputs)
+        return self.model(inputs)

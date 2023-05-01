@@ -9,10 +9,9 @@ class LinearModel(tf.keras.Model):
             tf.keras.layers.Dropout(0.2),
             tf.keras.layers.Dense(128, activation = 'leaky_relu'),
             tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(num_classes, activation = 'softmax')
+            tf.keras.layers.Dense(num_classes, activation = 'softmax'),
+            tf.keras.layers.Reshape((-1, ))
         ])
     
     def call(self, inputs):
-        print('inputs')
-        print(inputs)
         return self.model(inputs)

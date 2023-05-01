@@ -5,6 +5,7 @@ from sklearn.model_selection import train_test_split
 import pandas as pd
 from encoder import encode_text
 from LinearModel import LinearModel
+from CNNModel import CNNModel
 
 publishers = ["CNBC", "CNN", "Economist", "Fox News", "People", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
 
@@ -33,6 +34,7 @@ class ModelTrainer():
                 labels = train_labels[batch : batch + batch_size]
 
                 with tf.GradientTape() as tape:
+                    print(inputs)
                     predictions = self.model(inputs)
                     loss = loss_fn(labels, predictions)
 
@@ -84,7 +86,7 @@ def process_data(filepath):
 
 if __name__ == '__main__':
     train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/random.csv')
-    modelTrainer = ModelTrainer(LinearModel, train_inputs, train_labels, test_inputs, test_labels, 10)
+    modelTrainer = ModelTrainer(CNNModel, train_inputs, train_labels, test_inputs, test_labels, 10)
     modelTrainer.train(10, 32)
     modelTrainer.test()
 

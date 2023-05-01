@@ -1,17 +1,24 @@
 import tensorflow as tf
-from encoder import encode_text
 
 class LinearModel(tf.keras.Model):
     def __init__(self, num_classes):
         super(LinearModel, self).__init__()
-        self.model = tf.keras.Sequential([
-            tf.keras.layers.Dense(256, activation = 'leaky_relu'),
-            tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(128, activation = 'leaky_relu'),
-            tf.keras.layers.Dropout(0.2),
-            tf.keras.layers.Dense(num_classes, activation = 'softmax'),
-            tf.keras.layers.Reshape((-1, ))
-        ])
+        self.dense1 = tf.keras.layers.Dense(256, activation = 'relu')
+        self.dropout1 = tf.keras.layers.Dropout(0.2)
+        self.dense2 = tf.keras.layers.Dense(128, activation = 'relu')
+        self.dropout2 = tf.keras.layers.Dropout(0.2)
+        # Classification task so want to output a probability distribution over the classes
+        self.dense3 = tf.keras.layers.Dense(num_classes, activation = 'softmax')
+        # Reshape the output from size (batch_size, 1, 1024) to (batch_size, 1024)
+        self.reshape = tf.keras.layers.Reshape((-1, ))
     
     def call(self, inputs):
-        return self.model(inputs)
+        # Concatenate the inputs together into one Tensor
+        inputs = tf.concat(inputs, axis = 0)
+        x = self.dense1(inputs)
+        x = self.dropout1(x)
+        x = self.dense2(x)
+        x = self.dropout2(x)
+        x = self.dense3(x)
+        x = self.reshape(x)
+        return x

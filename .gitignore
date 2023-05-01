@@ -1,4 +1,5 @@
 Publications
 Samples/samples.csv
+Samples/stemmed_samples.csv
 Scripts/*.csv
 __pycache__

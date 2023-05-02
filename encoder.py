@@ -2,7 +2,7 @@ import tensorflow as tf
 import math
 
 def encode_text(article_text, preprocessor, encoder):
-    # NOTE: The following code on creating the encoder was taken from
+    # NOTE: The following code on creating the encoder was inspired by
     # https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/4
     # which details basic usage of creating a model to encode text
     # using BERT. 
@@ -21,25 +21,15 @@ def encode_text(article_text, preprocessor, encoder):
         
         # Encode each segment using BERT
         segment_input = tf.constant([segment_text])
-        segment_output = encoder(preprocessor(segment_input))["pooled_output"]
+        encoder_inputs = preprocessor(segment_input)
+        segment_output = encoder(encoder_inputs)["pooled_output"] # [batch_size, 1024]
         
         # Add the encoded features of the segment to the list
         encoded_segments.append(segment_output)
     
-    # Concatenate the encoded features of all segments
-    pooled_output = tf.reduce_mean(tf.stack(encoded_segments), axis=0)
+    # Stack the encoded features of all segments and then compute the average 
+    # pooled output of all the segments
+    stacked_encodings = tf.stack(encoded_segments)
+    pooled_output = tf.reduce_mean(stacked_encodings, axis=0)
 
-        
-    text_input = tf.keras.layers.Input(shape=(), dtype=tf.string)
-    
-    encoder_inputs = preprocessor(text_input)
-    outputs = encoder(encoder_inputs)
-    # Use pooled_output since we want to represent each input sequence as a whole
-    # which will be useful for classification of the article text 
-    pooled_output = outputs["pooled_output"]
-    # Create a Keras model to extract the encoded features
-    embedding_model = tf.keras.Model(text_input, pooled_output)
-    
-    # Encode the text
-    article_text = tf.constant([article_text])
-    return embedding_model(article_text) 
+    return pooled_output

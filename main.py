@@ -6,6 +6,7 @@ import pandas as pd
 from encoder import encode_text
 from LinearModel import LinearModel
 from CNNModel import CNNModel
+from LSTMModel import LSTMModel
 
 publishers = ["CNBC", "CNN", "Economist", "Fox News", "People", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
 
@@ -57,8 +58,8 @@ class ModelTrainer():
 def process_data(filepath):
     data = pd.read_csv(filepath)
     # Get all the articles and publications from the CSV of aggregate data
-    article_data = list(data['article'])[:10]
-    publication_data = list(data['publication'])[:10]
+    article_data = list(data['article'])[:4]
+    publication_data = list(data['publication'])[:4]
 
     # Replacing publisher with classifier index
     for i in range(len(publication_data)):
@@ -85,7 +86,7 @@ def process_data(filepath):
 
 if __name__ == '__main__':
     train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/random.csv')
-    modelTrainer = ModelTrainer(LinearModel, train_inputs, train_labels, test_inputs, test_labels, 10)
-    modelTrainer.train(10, 32)
+    modelTrainer = ModelTrainer(LSTMModel, train_inputs, train_labels, test_inputs, test_labels, 10)
+    modelTrainer.train(10, 1)
     modelTrainer.test()
 

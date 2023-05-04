@@ -68,9 +68,6 @@ def process_data(picklepath, csvpath):
     article_data = list(encodings)
     publication_data = list(data['publication'])
 
-    print(article_data[0])
-    print(publication_data[0])
-
     # Replacing publisher with classifier index
     for i in range(len(publication_data)):
         publisher_index = publishers.index(publication_data[i])
@@ -78,7 +75,6 @@ def process_data(picklepath, csvpath):
 
     # Split article data and publication labels into training and testing sets
     train_inputs, test_inputs, train_labels, test_labels = train_test_split(article_data, publication_data, train_size = 0.8, random_state = 100)
-
 
     # One hot encode publication labels
     train_labels, test_labels = tf.one_hot(train_labels, 10), tf.one_hot(test_labels, 10)
@@ -94,7 +90,7 @@ if __name__ == '__main__':
         csv = "stemmed_samples.csv"
 
     train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/' + type + '_tensors.pickle', 'Samples/' + csv)
-    modelTrainer = ModelTrainer(LSTMModel, train_inputs, train_labels, test_inputs, test_labels, 10)
+    modelTrainer = ModelTrainer(CNNModel, train_inputs, train_labels, test_inputs, test_labels, 10)
     modelTrainer.train(20, 50, 0.0018)
     modelTrainer.test()
 

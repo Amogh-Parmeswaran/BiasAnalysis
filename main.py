@@ -3,7 +3,6 @@ import tensorflow_hub as hub
 import tensorflow_text as text 
 from sklearn.model_selection import train_test_split
 import pandas as pd
-from encoder import encode_text
 from LinearModel import LinearModel
 from CNNModel import CNNModel
 import pickle
@@ -19,8 +18,8 @@ class ModelTrainer():
         self.test_labels = test_labels
         self.model = model(num_classes)
 
-    def train(self, epochs, batch_size):
-        optimizer = tf.keras.optimizers.Adam()
+    def train(self, epochs, batch_size, learning_rate):
+        optimizer = tf.keras.optimizers.Adam(learning_rate)
         loss_fn = tf.keras.losses.CategoricalCrossentropy()
 
         for epoch in range(epochs):
@@ -43,11 +42,13 @@ class ModelTrainer():
                 optimizer.apply_gradients(zip(gradients, self.model.trainable_variables))
 
             train_accuracy = self.evaluate(self.train_inputs, self.train_labels)
-            print("Training accuracy: {:.2f}%".format(train_accuracy * 100))
+            train_percentage = round(train_accuracy * 100, 2)
+            print(f"Training accuracy: {train_percentage}%")
 
     def test(self):
         test_accuracy = self.evaluate(self.test_inputs, self.test_labels)
-        print("Test accuracy: {:.2f}%".format(test_accuracy * 100))
+        test_percentage = round(test_accuracy * 100, 2)
+        print(f"Test accuracy: {test_percentage}%")
 
     def evaluate(self, inputs, labels):
         predictions = self.model(inputs)
@@ -85,15 +86,15 @@ def process_data(picklepath, csvpath):
     return train_inputs, test_inputs, train_labels, test_labels
 
 if __name__ == '__main__':
-    type = "sample"
-    # type = "stemmed"
+    # type = "sample"
+    type = "stemmed"
 
     csv = "samples.csv"
     if type != "sample": 
         csv = "stemmed_samples.csv"
 
     train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/' + type + '_tensors.pickle', 'Samples/' + csv)
-    modelTrainer = ModelTrainer(CNNModel, train_inputs, train_labels, test_inputs, test_labels, 10)
-    modelTrainer.train(10, 32)
+    modelTrainer = ModelTrainer(LSTMModel, train_inputs, train_labels, test_inputs, test_labels, 10)
+    modelTrainer.train(20, 50, 0.0018)
     modelTrainer.test()
 

@@ -1,5 +1,8 @@
 Publications
-Samples/samples.csv
-Samples/stemmed_samples.csv
+# Samples/samples.csv
+# Samples/stemmed_samples.csv
 Scripts/*.csv
 __pycache__
+MyPackageName.egg-info
+setup.py
+Samples/tensor*

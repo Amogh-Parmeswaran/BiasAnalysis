@@ -6,8 +6,9 @@ import pandas as pd
 from encoder import encode_text
 from LinearModel import LinearModel
 from CNNModel import CNNModel
+import pickle
 
-publishers = ["CNBC", "CNN", "Economist", "Fox News", "People", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
+publishers = ["CNBC", "CNN", "Economist", "Fox News", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
 
 class ModelTrainer():
     def __init__(self, model, train_inputs, train_labels, test_inputs, test_labels, num_classes):
@@ -54,25 +55,22 @@ class ModelTrainer():
         return accuracy.numpy()
 
 
-def process_data(filepath):
-    data = pd.read_csv(filepath)
+def process_data(picklepath, csvpath):
+    encodings = pickle.load(picklepath)
+    data = pd.read_csv(csvpath)
+
+    print('Loaded data')
     # Get all the articles and publications from the CSV of aggregate data
-    article_data = list(data['article'])[:10]
-    publication_data = list(data['publication'])[:10]
+    article_data = list(encodings)
+    publication_data = list(data['publication'])
+
+    print(article_data[0])
+    print(publication_data[0])
 
     # Replacing publisher with classifier index
     for i in range(len(publication_data)):
         publisher_index = publishers.index(publication_data[i])
         publication_data[i] = publisher_index
-    
-    preprocessor = hub.KerasLayer("https://tfhub.dev/tensorflow/bert_en_uncased_preprocess/3")
-    encoder = hub.KerasLayer(
-            "https://tfhub.dev/tensorflow/bert_en_uncased_L-24_H-1024_A-16/4",
-            trainable=True)
-    for index, article in enumerate(article_data):
-        article_data[index] = encode_text(article, preprocessor, encoder)
-        print("Encoded: ", index)
-        print(article_data[index])
 
     # Split article data and publication labels into training and testing sets
     train_inputs, test_inputs, train_labels, test_labels = train_test_split(article_data, publication_data, train_size = 0.8, random_state = 100)
@@ -84,7 +82,14 @@ def process_data(filepath):
     return train_inputs, test_inputs, train_labels, test_labels
 
 if __name__ == '__main__':
-    train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/random.csv')
+    type = "sample"
+    # type = "stemmed"
+
+    csv = "samples.csv"
+    if type != "sample": 
+        csv = "stemmed_samples.csv"
+
+    train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/' + type + '_tensors.pickle', 'Samples/' + csv)
     modelTrainer = ModelTrainer(LinearModel, train_inputs, train_labels, test_inputs, test_labels, 10)
     modelTrainer.train(10, 32)
     modelTrainer.test()

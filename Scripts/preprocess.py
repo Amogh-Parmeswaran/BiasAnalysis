@@ -2,6 +2,8 @@ import pandas as pd
 import string
 import re
 
+# This is the main prepocessor for the news-dataset (raw data) csv
+
 # Load the CSV file
 data = pd.read_csv('news-dataset.csv')
 

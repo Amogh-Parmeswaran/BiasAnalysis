@@ -6,12 +6,14 @@ import nltk
 from nltk.corpus import stopwords
 from nltk.stem import PorterStemmer
 
+# Additional preprocessing for analysis used to stem words and remove stops
 
 stemmer = PorterStemmer()
 stop_words = set(stopwords.words("english"))
 
 root_dir = './Publications'  # Replace with the path to your root directory
 output_dir = os.path.join(os.getcwd(), 'Samples')
+bucket_size = 500
 
 data_frames = []
 get_header =  0
@@ -20,12 +22,12 @@ for filename in os.listdir(root_dir):
         file_path = os.path.join(root_dir, filename)
         df = pd.read_csv(file_path, header=get_header)
 
-        # Take 5000 random rows from the data frame
+        # Take 500 random rows from the data frame
         if get_header:
-            random_rows = df.sample(n=5001)
+            random_rows = df.sample(n=bucket_size + 1)
             get_header = 1
         else:
-            random_rows = df.sample(n=5000)
+            random_rows = df.sample(n=bucket_size)
         
         for index, row in random_rows.iterrows():
             # Tokenize the "article" column
@@ -48,4 +50,4 @@ for filename in os.listdir(root_dir):
 result = pd.concat(data_frames)
 
 # Export the aggregated data to a new CSV file
-# result.to_csv('./Samples/stemmed_samples.csv', index=False)
+result.to_csv('./Samples/stemmed_samples.csv', index=False)

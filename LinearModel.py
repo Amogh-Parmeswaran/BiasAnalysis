@@ -13,7 +13,7 @@ class LinearModel(tf.keras.Model):
     def call(self, inputs):
         # Concatenate the inputs together into one Tensor
         inputs = tf.concat(inputs, axis = 0)
-        x = self.dense1(x)
+        x = self.dense1(inputs)
         x = self.dropout1(x)
         x = self.dense2(x)
         x = self.dropout2(x)

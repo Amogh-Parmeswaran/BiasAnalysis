@@ -57,7 +57,9 @@ class ModelTrainer():
 
 
 def process_data(picklepath, csvpath):
-    encodings = pickle.load(picklepath)
+    print(picklepath)
+    with open(picklepath, 'rb') as f:
+        encodings = pickle.load(f)
     data = pd.read_csv(csvpath)
 
     print('Loaded data')

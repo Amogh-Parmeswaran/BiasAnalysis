@@ -9,7 +9,7 @@ root_dir = './Samples'  # Replace with the path to your root directory
 
 csv.field_size_limit(10 * 1024 * 1024)
 
-publishers = ["CNBC", "CNN", "Economist", "Fox News", "People", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
+publishers = ["CNBC", "CNN", "Economist", "Fox News", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
 for filename in os.listdir(root_dir):
     if filename.endswith('.csv') and filename != 'news-dataset.csv':
 

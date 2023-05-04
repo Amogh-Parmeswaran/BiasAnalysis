@@ -93,7 +93,7 @@ if __name__ == '__main__':
         csv = "stemmed_samples.csv"
 
     train_inputs, test_inputs, train_labels, test_labels = process_data('Samples/' + type + '_tensors.pickle', 'Samples/' + csv)
-    modelTrainer = ModelTrainer(LinearModel, train_inputs, train_labels, test_inputs, test_labels, 10)
+    modelTrainer = ModelTrainer(CNNModel, train_inputs, train_labels, test_inputs, test_labels, 10)
     modelTrainer.train(10, 32)
     modelTrainer.test()
 

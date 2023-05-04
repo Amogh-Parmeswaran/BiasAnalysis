@@ -7,6 +7,7 @@ from encoder import encode_text
 from LinearModel import LinearModel
 from CNNModel import CNNModel
 import pickle
+from LSTMModel import LSTMModel
 
 publishers = ["CNBC", "CNN", "Economist", "Fox News", "The New York Times", "People", "Vice News", "Politico", "Reuters", "TMZ"]
 

@@ -9,16 +9,13 @@ class LinearModel(tf.keras.Model):
         self.dropout2 = tf.keras.layers.Dropout(0.2)
         # Classification task so want to output a probability distribution over the classes
         self.dense3 = tf.keras.layers.Dense(num_classes, activation = 'softmax')
-        # Reshape the output from size (batch_size, 1, 1024) to (batch_size, 1024)
-        self.reshape = tf.keras.layers.Reshape((-1, ))
     
     def call(self, inputs):
         # Concatenate the inputs together into one Tensor
         inputs = tf.concat(inputs, axis = 0)
-        x = self.dense1(inputs)
+        x = self.dense1(x)
         x = self.dropout1(x)
         x = self.dense2(x)
         x = self.dropout2(x)
         x = self.dense3(x)
-        x = self.reshape(x)
         return x
